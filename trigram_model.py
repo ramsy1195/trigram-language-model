@@ -229,27 +229,32 @@ def essay_scoring_experiment(training_file1, training_file2, testdir1, testdir2)
     return accuracy
 
 if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        model = TrigramModel(sys.argv[1])
+        print("Trained model. Enter Python interactive mode to test methods.")
+        
+    elif len(sys.argv) == 5:
+        training_high = sys.argv[1]
+        training_low = sys.argv[2]
+        test_high = sys.argv[3]
+        test_low = sys.argv[4]
+    
+        model_high = TrigramModel(training_high)
+        model_low = TrigramModel(training_low)
+    
+        dev_corpus = corpus_reader(test_high, model_high.lexicon)
+        pp_high = model_high.perplexity(dev_corpus)
+        print(f"Perplexity for high model on dev corpus: {pp_high}")
+    
+        dev_corpus = corpus_reader(test_low, model_low.lexicon)
+        pp_low = model_low.perplexity(dev_corpus)
+        print(f"Perplexity for low model on dev corpus: {pp_low}")
+    
+        accuracy = essay_scoring_experiment(training_high, training_low, test_high, test_low)
+        print(f"Accuracy of essay scoring experiment: {accuracy:.2f}")
 
-    if len(sys.argv) < 5:
-       print("Usage: python trigram_model.py <training_high> <training_low> <test_high> <test_low>")
-       sys.exit(1)
-
-    training_high = sys.argv[1]
-    training_low = sys.argv[2]
-    test_high = sys.argv[3]
-    test_low = sys.argv[4]
-
-    model_high = TrigramModel(training_high)
-    model_low = TrigramModel(training_low)
-
-    dev_corpus = corpus_reader(test_high, model_high.lexicon)
-    pp_high = model_high.perplexity(dev_corpus)
-    print(f"Perplexity for high model on dev corpus: {pp_high}")
-
-    dev_corpus = corpus_reader(test_low, model_low.lexicon)
-    pp_low = model_low.perplexity(dev_corpus)
-    print(f"Perplexity for low model on dev corpus: {pp_low}")
-
-    accuracy = essay_scoring_experiment(training_high, training_low, test_high, test_low)
-    print(f"Accuracy of essay scoring experiment: {accuracy:.2f}")
-
+    else:
+        print("Usage:")
+        print("  python trigram_model.py <corpus_file>                   # for interactive use")
+        print("  python trigram_model.py <train_high> <train_low> <test_high> <test_low>  # for essay scoring")
+        sys.exit(1)
