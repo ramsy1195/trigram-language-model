@@ -5,9 +5,7 @@ import random
 import os
 import os.path
 """
-COMS W4705 - Natural Language Processing - Fall 2024 
-Programming Homework 1 - Trigram Language Models
-Daniel Bauer
+Trigram Language Models
 """
 
 def corpus_reader(corpusfile, lexicon=None): 
