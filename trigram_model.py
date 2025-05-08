@@ -125,20 +125,42 @@ class TrigramModel(object):
         else:
             return 0.0
 
-    def generate_sentence(self, t=20): 
+    def generate_sentence(self, t=20):
+        """
+        Generate a random sentence from the trigram model using smoothed trigram probabilities.
+        """
         sentence = ['START', 'START']
-        while len(sentence) < t:
-            next_word_probs = defaultdict(float)
-            for trigram in self.trigramcounts:
-                if trigram[0] == sentence[-2] and trigram[1] == sentence[-1]:
-                    next_word_probs[trigram[2]] += self.raw_trigram_probability(trigram)
-            if not next_word_probs:
+        result = []
+    
+        for _ in range(t):
+            context = (sentence[-2], sentence[-1])
+            candidates = [w for (_, _, w) in self.trigramcounts if (_ , _) == context]
+    
+            if not candidates:
                 break
-            next_word = max(next_word_probs, key=next_word_probs.get)
-            sentence.append(next_word)
-            if next_word == 'STOP':
+    
+            probs = []
+            for word in candidates:
+                trigram = (context[0], context[1], word)
+                prob = self.smoothed_trigram_probability(trigram)
+                probs.append(prob)
+    
+            total = sum(probs)
+            if total == 0:
                 break
-        return ' '.join(sentence[2:-1])        
+    
+            # Normalize probabilities
+            probs = [p / total for p in probs]
+    
+            # Sample next word
+            word = random.choices(candidates, weights=probs, k=1)[0]
+            if word == 'STOP':
+                break
+    
+            sentence.append(word)
+            result.append(word)
+    
+        return result
 
     def smoothed_trigram_probability(self, trigram):
         """
