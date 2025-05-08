@@ -36,7 +36,31 @@ The `data/` folder contains:
 
 ## Usage
 
-Run the program in interactive mode:
+### Install Dependencies:
+To install the required dependencies, use the following command:
+pip install -r requirements.txt
+### Running the Code:
+1. **Training the Model:**
+To train the trigram model, provide a corpus file and run:
+```python
+trigram_model.py <corpus_file>
+```
+2. **Generating Sentences:**
+Once the model is trained, you can generate random sentences based on the trigram model:
+```python
+model = TrigramModel(<corpus_file>)
+print(model.generate_sentence(t=20))  # Generates a sentence with a max length of 20 words
+```
+3. **Evaluating Perplexity:**
+To evaluate the model's perplexity on a test corpus, run:
+```python
+trigram_model.py <training_high> <training_low> <test_high> <test_low>
+```
+This will print the perplexity for both high and low models.
 
-```bash
-python -i trigram_model.py data/brown_train
+4. **Essay Scoring Experiment:**
+Run the essay scoring experiment by providing paths to the training and test datasets:
+```python
+trigram_model.py <train_high> <train_low> <test_high> <test_low>
+```
+The script will calculate the accuracy of the essay scoring experiment.
