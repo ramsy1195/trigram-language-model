@@ -4,15 +4,18 @@ This project implements a Trigram Language Model in Python, using unsmoothed and
 
 ## Project Structure
 
-├── trigram_model.py # Main Python file with the TrigramModel class
+```text
+.
+├── trigram_model.py         # Main Python file with the TrigramModel class
 ├── data/
-│ ├── brown_train # Training data from Brown corpus
-│ ├── brown_test # Test data from Brown corpus
-│ └── ets_toefl_data/
-│ ├── train_high.txt # High-quality training essays
-│ ├── train_low.txt # Low-quality training essays
-│ ├── test_high/ # Folder of high-quality test essays
-│ └── test_low/ # Folder of low-quality test essays
+│   ├── brown_train          # Training data from Brown corpus
+│   ├── brown_test           # Test data from Brown corpus
+│   └── ets_toefl_data/
+│       ├── train_high.txt   # High-quality training essays
+│       ├── train_low.txt    # Low-quality training essays
+│       ├── test_high/       # Folder of high-quality test essays
+│       └── test_low/        # Folder of low-quality test essays
+```
 
 ## Features
 
