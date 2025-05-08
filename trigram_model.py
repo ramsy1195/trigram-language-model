@@ -29,8 +29,7 @@ def get_lexicon(corpus):
 
 def get_ngrams(sequence, n):
     """
-    COMPLETE THIS FUNCTION (PART 1)
-    Given a sequence, this function should return a list of n-grams, where each n-gram is a Python tuple.
+    Given a sequence, this function returns a list of n-grams, where each n-gram is a Python tuple.
     This should work for arbitrary values of n >= 1 
     """
     n_sequence = ['START'] + sequence + ['STOP']
@@ -66,8 +65,7 @@ class TrigramModel(object):
 
     def count_ngrams(self, corpus):
         """
-        COMPLETE THIS METHOD (PART 2)
-        Given a corpus iterator, populate dictionaries of unigram, bigram,
+        Given a corpus iterator, populates dictionaries of unigram, bigram,
         and trigram counts. 
         """
    
@@ -93,7 +91,6 @@ class TrigramModel(object):
 
     def raw_trigram_probability(self,trigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) trigram probability
         """
         bigram = (trigram[0], trigram[1])
@@ -108,7 +105,6 @@ class TrigramModel(object):
 
     def raw_bigram_probability(self, bigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) bigram probability
         """
         first_unigram = (bigram[0],)
@@ -122,28 +118,30 @@ class TrigramModel(object):
     
     def raw_unigram_probability(self, unigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) unigram probability.
         """
         if self.total_word_count > 0:
             return self.unigramcounts[unigram] / self.total_word_count
         else:
             return 0.0
-        #hint: recomputing the denominator every time the method is called
-        # can be slow! You might want to compute the total number of words once, 
-        # store in the TrigramModel instance, and then re-use it.  
 
-    def generate_sentence(self,t=20): 
-        """
-        COMPLETE THIS METHOD (OPTIONAL)
-        Generate a random sentence from the trigram model. t specifies the
-        max length, but the sentence may be shorter if STOP is reached.
-        """
-        return result            
+    def generate_sentence(self, t=20): 
+        sentence = ['START', 'START']
+        while len(sentence) < t:
+            next_word_probs = defaultdict(float)
+            for trigram in self.trigramcounts:
+                if trigram[0] == sentence[-2] and trigram[1] == sentence[-1]:
+                    next_word_probs[trigram[2]] += self.raw_trigram_probability(trigram)
+            if not next_word_probs:
+                break
+            next_word = max(next_word_probs, key=next_word_probs.get)
+            sentence.append(next_word)
+            if next_word == 'STOP':
+                break
+        return ' '.join(sentence[2:-1])        
 
     def smoothed_trigram_probability(self, trigram):
         """
-        COMPLETE THIS METHOD (PART 4)
         Returns the smoothed trigram probability (using linear interpolation). 
         """
         lambda1 = 1/3.0
@@ -164,7 +162,6 @@ class TrigramModel(object):
         
     def sentence_logprob(self, sentence):
         """
-        COMPLETE THIS METHOD (PART 5)
         Returns the log probability of an entire sequence.
         """
         log_prob = 0.0
@@ -181,8 +178,7 @@ class TrigramModel(object):
         return log_prob
 
     def perplexity(self, corpus):
-        """
-        COMPLETE THIS METHOD (PART 6) 
+        """ 
         Returns the perplexity 
         """
         total_log_prob = 0.0
@@ -200,7 +196,7 @@ class TrigramModel(object):
             perplexity = 2 ** (-l)
             return perplexity
         else:
-            return float("inf") 
+            return float('inf') 
 
 
 def essay_scoring_experiment(training_file1, training_file2, testdir1, testdir2):
@@ -234,48 +230,26 @@ def essay_scoring_experiment(training_file1, training_file2, testdir1, testdir2)
 
 if __name__ == "__main__":
 
-    # model = TrigramModel(sys.argv[1]) 
+    if len(sys.argv) < 5:
+       print("Usage: python trigram_model.py <training_high> <training_low> <test_high> <test_low>")
+       sys.exit(1)
 
-    # put test code here...
-    # or run the script from the command line with 
-    # $ python -i trigram_model.py [corpus_file]
-    # >>> 
-    #
-    # you can then call methods on the model instance in the interactive 
-    # Python prompt. 
+    training_high = sys.argv[1]
+    training_low = sys.argv[2]
+    test_high = sys.argv[3]
+    test_low = sys.argv[4]
 
-    
-    # Testing perplexity: 
-    # dev_corpus = corpus_reader(sys.argv[2], model.lexicon)
-    # pp = model.perplexity(dev_corpus)
-    # print(pp)
+    model_high = TrigramModel(training_high)
+    model_low = TrigramModel(training_low)
 
+    dev_corpus = corpus_reader(test_high, model_high.lexicon)
+    pp_high = model_high.perplexity(dev_corpus)
+    print(f"Perplexity for high model on dev corpus: {pp_high}")
 
-    # Essay scoring experiment: 
-    # acc = essay_scoring_experiment('train_high.txt', 'train_low.txt", "test_high", "test_low")
-    # print(acc)
-    
-    # for testing purposes:
-    # if len(sys.argv) < 5:
-    #    print("Usage: python trigram_model.py <training_high> <training_low> <test_high> <test_low>")
-    #    sys.exit(1)
+    dev_corpus = corpus_reader(test_low, model_low.lexicon)
+    pp_low = model_low.perplexity(dev_corpus)
+    print(f"Perplexity for low model on dev corpus: {pp_low}")
 
-    # training_high = sys.argv[1]
-    # training_low = sys.argv[2]
-    # test_high = sys.argv[3]
-    # test_low = sys.argv[4]
-
-    # model_high = TrigramModel(training_high)
-    # model_low = TrigramModel(training_low)
-
-    # dev_corpus = corpus_reader(test_high, model_high.lexicon)
-    # pp_high = model_high.perplexity(dev_corpus)
-    # print(f"Perplexity for high model on dev corpus: {pp_high}")
-
-    # dev_corpus = corpus_reader(test_low, model_low.lexicon)
-    # pp_low = model_low.perplexity(dev_corpus)
-    # print(f"Perplexity for low model on dev corpus: {pp_low}")
-
-    # accuracy = essay_scoring_experiment(training_high, training_low, test_high, test_low)
-    # print(f"Accuracy of essay scoring experiment: {accuracy:.2f}")
+    accuracy = essay_scoring_experiment(training_high, training_low, test_high, test_low)
+    print(f"Accuracy of essay scoring experiment: {accuracy:.2f}")
 
