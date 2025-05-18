@@ -5,9 +5,8 @@ import random
 import os
 import os.path
 """
-COMS W4705 - Natural Language Processing - Fall 2024 
-Programming Homework 1 - Trigram Language Models
-Daniel Bauer
+Trigram Language Model
+Ramya Mohan
 """
 
 def corpus_reader(corpusfile, lexicon=None): 
@@ -31,9 +30,8 @@ def get_lexicon(corpus):
 
 def get_ngrams(sequence, n):
     """
-    COMPLETE THIS FUNCTION (PART 1)
-    Given a sequence, this function should return a list of n-grams, where each n-gram is a Python tuple.
-    This should work for arbitrary values of n >= 1 
+    Given a sequence, returns a list of n-grams, where each n-gram is a Python tuple; 
+    works for arbitrary values of n >= 1 
     """
     n_sequence = ['START'] + sequence + ['STOP']
     if n > 1:
@@ -68,8 +66,7 @@ class TrigramModel(object):
 
     def count_ngrams(self, corpus):
         """
-        COMPLETE THIS METHOD (PART 2)
-        Given a corpus iterator, populate dictionaries of unigram, bigram,
+        Given a corpus iterator, populates dictionaries of unigram, bigram,
         and trigram counts. 
         """
    
@@ -95,7 +92,6 @@ class TrigramModel(object):
 
     def raw_trigram_probability(self,trigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) trigram probability
         """
         bigram = (trigram[0], trigram[1])
@@ -110,7 +106,6 @@ class TrigramModel(object):
 
     def raw_bigram_probability(self, bigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) bigram probability
         """
         first_unigram = (bigram[0],)
@@ -124,7 +119,6 @@ class TrigramModel(object):
     
     def raw_unigram_probability(self, unigram):
         """
-        COMPLETE THIS METHOD (PART 3)
         Returns the raw (unsmoothed) unigram probability.
         """
         if self.total_word_count > 0:
@@ -137,7 +131,6 @@ class TrigramModel(object):
 
     def generate_sentence(self,t=20): 
         """
-        COMPLETE THIS METHOD (OPTIONAL)
         Generate a random sentence from the trigram model. t specifies the
         max length, but the sentence may be shorter if STOP is reached.
         """
@@ -173,7 +166,6 @@ class TrigramModel(object):
 
     def smoothed_trigram_probability(self, trigram):
         """
-        COMPLETE THIS METHOD (PART 4)
         Returns the smoothed trigram probability (using linear interpolation). 
         """
         lambda1 = 1/3.0
@@ -194,7 +186,6 @@ class TrigramModel(object):
         
     def sentence_logprob(self, sentence):
         """
-        COMPLETE THIS METHOD (PART 5)
         Returns the log probability of an entire sequence.
         """
         log_prob = 0.0
@@ -212,7 +203,6 @@ class TrigramModel(object):
 
     def perplexity(self, corpus):
         """
-        COMPLETE THIS METHOD (PART 6) 
         Returns the perplexity 
         """
         total_log_prob = 0.0
