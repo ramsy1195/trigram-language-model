@@ -1,1 +1,2 @@
-nltk==3.7
+# No external dependencies required.
+# Project uses only standard Python libraries.
