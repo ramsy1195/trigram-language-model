@@ -1,22 +1,27 @@
-# Python bytecode and caches
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 
-# Jupyter Notebook checkpoints (if any)
-.ipynb_checkpoints/
-
-# Operating system files
-.DS_Store
-Thumbs.db
-
-# VS Code settings (optional)
-.vscode/
-
-# Virtual environments (if used)
+# Virtual environment
 venv/
 env/
 
-# Logs or temp files (optional)
+# Editor settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Test and runtime output
 *.log
-*.tmp
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python egg metadata
+*.egg-info/
+
 
