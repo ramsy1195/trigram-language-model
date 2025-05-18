@@ -5,13 +5,15 @@ This project implements a Trigram Language Model in Python, using unsmoothed and
 ## Project Structure
 
 ```text
-├── trigram_model.py         # Main Python file with the TrigramModel class
+.
+├── trigram_model.py         # Main Python file with the TrigramModel class and experiment logic
 ├── data/
 |  ├── train_high.txt   # High-quality training essays
 |  ├── train_low.txt    # Low-quality training essays
 |  ├── test_high/       # Folder of high-quality test essays
 |  └── test_low/        # Folder of low-quality test essays
-└── README.md
+├── requirements.txt  # Dependency list (currently empty — only standard libraries used)
+└── .gitignore  # Files and folders to exclude from Git version control
 ```
 
 ## Features
